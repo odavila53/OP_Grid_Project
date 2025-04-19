@@ -1,6 +1,11 @@
 const container = document.querySelector("#container");
 const colors = ["#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"];
-const btn = document.querySelector("button");
+const sizeBtn = document.querySelector("#size-btn");
+const eraserBtn = document.querySelector("#eraser-btn");
+const clearBtn = document.querySelector("#clear-btn");
+// const btn = document.querySelector("button");
+
+let isErasing = false;
 
 createGrid(16);
 
@@ -25,12 +30,26 @@ function gridColor() {
 
     boxes.forEach(box => {
         box.addEventListener("mouseover", function (e) {
-            if (!e.target.style.background) {
+            if (isErasing) {
+                e.target.style.background = "";
+            } else if (!e.target.style.background) {
                 const randomIndex = Math.floor(Math.random() * colors.length);
                 const randomColor = colors[randomIndex];
                 e.target.style.background = randomColor;
             }
         });
+    });
+}
+
+function toggleEraser() {
+    isErasing = !isErasing;
+    eraserBtn.classList.toggle("active");
+}
+
+function clearGrid() {
+    const boxes = document.querySelectorAll(".grid-box");
+    boxes.forEach(box => {
+        box.style.background = "";
     });
 }
 
@@ -49,4 +68,6 @@ function alertButton() {
 }
 
 // You can call the function here using this, or add gridColor() in the HTML file
-btn.addEventListener("click", alertButton);
+sizeBtn.addEventListener("click", alertButton);
+eraserBtn.addEventListener("click", toggleEraser);
+clearBtn.addEventListener("click", clearGrid);
